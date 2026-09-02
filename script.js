@@ -50,3 +50,50 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         }
     });
 });
+
+// EmailJS Appointment Form
+const appointmentForm = document.getElementById('appointmentForm');
+const appButton = document.getElementById('appButton');
+
+// EmailJS credentials — replace with your own from emailjs.com
+const EMAILJS_PUBLIC_KEY = 'YOUR_PUBLIC_KEY';
+const EMAILJS_SERVICE_ID = 'YOUR_SERVICE_ID';
+const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';
+
+if (window.emailjs) {
+    emailjs.init(EMAILJS_PUBLIC_KEY);
+}
+
+appointmentForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const original = appButton.innerHTML;
+    appButton.disabled = true;
+    appButton.innerHTML = '<span class="btn-icon"><i class="fas fa-spinner fa-spin"></i></span> Sending...';
+
+    const templateParams = {
+        from_name: document.getElementById('app-name').value,
+        customer_phone: document.getElementById('app-phone').value,
+        app_date: document.getElementById('app-date').value,
+        doctor: document.getElementById('app-doctor').value
+    };
+
+    if (!window.emailjs || EMAILJS_PUBLIC_KEY.includes('YOUR_')) {
+        appButton.disabled = false;
+        appButton.innerHTML = original;
+        alert('EmailJS is not configured yet. Replace the placeholder credentials in script.js.');
+        return;
+    }
+
+    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
+        .then(() => {
+            appButton.innerHTML = '<span class="btn-icon"><i class="fas fa-check-circle"></i></span> Appointment Request Sent!';
+            appointmentForm.reset();
+            setTimeout(() => { appButton.innerHTML = original; appButton.disabled = false; }, 3500);
+        })
+        .catch((error) => {
+            console.error('EmailJS error:', error);
+            appButton.innerHTML = '<span class="btn-icon"><i class="fas fa-exclamation-circle"></i></span> Failed. Please Try Again';
+            setTimeout(() => { appButton.innerHTML = original; appButton.disabled = false; }, 3000);
+        });
+});
