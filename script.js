@@ -55,10 +55,10 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 const appointmentForm = document.getElementById('appointmentForm');
 const appButton = document.getElementById('appButton');
 
-// EmailJS credentials — replace with your own from emailjs.com
-const EMAILJS_PUBLIC_KEY = 'YOUR_PUBLIC_KEY';
-const EMAILJS_SERVICE_ID = 'YOUR_SERVICE_ID';
-const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';
+// EmailJS credentials — shared with your EmailJS account
+const EMAILJS_PUBLIC_KEY = 'OtP5WKK3EKEV7Mis6';
+const EMAILJS_SERVICE_ID = 'service_5q9oh6a';
+const EMAILJS_TEMPLATE_ID = 'template_t5xdn0l';
 
 if (window.emailjs) {
     emailjs.init(EMAILJS_PUBLIC_KEY);
@@ -78,10 +78,10 @@ appointmentForm.addEventListener('submit', (e) => {
         doctor: document.getElementById('app-doctor').value
     };
 
-    if (!window.emailjs || EMAILJS_PUBLIC_KEY.includes('YOUR_')) {
+    if (!window.emailjs) {
         appButton.disabled = false;
         appButton.innerHTML = original;
-        alert('EmailJS is not configured yet. Replace the placeholder credentials in script.js.');
+        alert('EmailJS is not loaded. Check internet connection.');
         return;
     }
 
